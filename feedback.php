@@ -82,81 +82,49 @@ if ($result->num_rows > 0) {
   </div>
 </nav>
 <div class="container mt-10 p-2">
- <h2 class="text-center">Post Complain</h2>
+  <h2 class="text-center">Post Feedback</h2>
   <form action="" id="userForm">
     <div class="form-group">
       <label for="name">Name:</label>
+      <input type="hidden" name="userid" value="<?php echo $id;?>">
       <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name">
     </div>
-    <input type="hidden" name="userid" value="<?php echo $id;?>">
     <div class="form-group">
-      <label for="land">Landmark:</label>
-      <input type="text" class="form-control" id="land" placeholder="Enter Landmark" name="land">
+      <label for="land">Email:</label>
+      <input type="text" class="form-control" id="email" placeholder="Enter Email" name="email">
     </div>
     <div class="form-group">
-      <label for="add">Address:</label>
-      <input type="text" class="form-control" id="add" placeholder="Enter Address" name="add">
+      <label for="add">Feedback:</label>
+      <textarea class="form-control" rows="5" id="feedback" name="feedback"></textarea>
     </div>
-    <div class="form-group">
-      <label for="land">Place:</label>
-      <input type="text" class="form-control" id="place" placeholder="Enter Landmark" name="place">
-    </div>
-    <div class="form-group">
-  <label for="loc">Location:</label>
-  <select class="form-control" id="loc" name="location">
-    <option value="Sultanpuri">Sultanpuri</option>
-    <option value="Mangolpuri">Mangolpuri</option>
-    <option value="Peeragadhi">Peeragadhi</option>
-    <option value="Metro">Metro</option>
-  </select>
-</div>
- <div class="form-group">
-  <label for="type">Complaint Type:</label>
-  <select class="form-control" id="type" name="type">
-    <option value="Street Light">Street Light</option>
-    <option value="Pipe leakage">Pipe leakage</option>
-    <option value="Rain Water">Rain Water</option>
-    <option value="Road Reconstruction">Road Reconstruction</option>
-    <option value="Garbage">Garbage</option>
-  </select>
-</div>
-<div class="form-group">
-  <label for="comment">Complain:</label>
-  <textarea class="form-control" rows="5" id="complain" name="complain"></textarea>
-</div>
- <div class="form-group">
-  <label for="type">Complaint Level:</label>
-  <select class="form-control" id="type" name="level">
-    <option value="Low">Low</option>
-    <option value="Medium">Medium</option>
-    <option value="High">High</option>
-  </select>
-</div>
-    <button type="submit" class="btn btn-primary btn-block" id="btn">Post Complain</button>
-  </form>
-  <style type="text/css">
+    <button type="submit" class="btn btn-primary btn-block" id="btn">Submit Feedback</button>
+    <style type="text/css">
     #noti{
       display: none;
     }
   </style>
-  <div class="alert alert-danger alert-dismissible fade show" id="noti">
+    <div class="alert alert-danger alert-dismissible fade show" id="noti">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Danger!</strong> Somthing went wrong
   </div>
+  </form>
+
+</div>
+</body>
+</html>
   <script>
 $(document).ready(function(){
 $('#userForm').submit(function(){
 
 var name = $('#name').val();
-var land = $('#land').val();
-var add = $('#add').val();
-var place = $('#place').val();
-var complain = $('#complain').val();
+var land = $('#email').val();
+var add = $('#feedback').val();
+
 
 // show that something is loading
 $('#btn').val("Please wait!");
 
-if(name == '' || land == '' || add == '' || place == '' || complain == ''){
+if(name == '' || email == '' || feedback == ''){
   $('#noti').css('display','block');
   return false;
 }
@@ -164,7 +132,7 @@ else {
 // Call ajax for pass data to other place
 $.ajax({
 type: 'POST',
-url: 'general.php',
+url: 'feed.php',
 data: $(this).serialize() // getting filed value in serialize form
 })
 .done(function(data){ // if getting done then call.
@@ -186,6 +154,3 @@ return false;
 });
 });
 </script>
-</div>
-</body>
-</html>

@@ -1,42 +1,3 @@
-<?php
-session_start();
-if (isset($_SESSION["email"])) {
-    $email = $_SESSION["email"];
-    session_write_close();
-} else {
-    // since the username is not set in session, the user is not-logged-in
-    // he is trying to access this page unauthorized
-    // so let's clear all session variables and redirect him to index
-    session_unset();
-    session_write_close();
-    $url = "./index.php";
-    header("Location: $url");
-}
-
-?>
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "complaint";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
-
-$sql = "SELECT * FROM users where Email = '$email'";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-  // output data of each row
-  while($row = $result->fetch_assoc()) {
-    $id = $row['id'];
-  }
-}
-?>
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,28 +43,27 @@ if ($result->num_rows > 0) {
   </div>
 </nav>
 <div class="container mt-10 p-2">
- <h2 class="text-center">Post Complain</h2>
+ <h2 class="text-center">Add officer</h2>
   <form action="" id="userForm">
     <div class="form-group">
       <label for="name">Name:</label>
       <input type="text" class="form-control" id="name" placeholder="Enter Name" name="name">
     </div>
-    <input type="hidden" name="userid" value="<?php echo $id;?>">
     <div class="form-group">
-      <label for="land">Landmark:</label>
-      <input type="text" class="form-control" id="land" placeholder="Enter Landmark" name="land">
+      <label for="land">Email:</label>
+      <input type="text" class="form-control" id="email" placeholder="Enter Email" name="email">
     </div>
     <div class="form-group">
-      <label for="add">Address:</label>
-      <input type="text" class="form-control" id="add" placeholder="Enter Address" name="add">
+      <label for="add">Password:</label>
+      <input type="text" class="form-control" id="password" placeholder="Enter Password" name="password">
     </div>
     <div class="form-group">
-      <label for="land">Place:</label>
-      <input type="text" class="form-control" id="place" placeholder="Enter Landmark" name="place">
+      <label for="land">Mobile:</label>
+      <input type="text" class="form-control" id="mobile" placeholder="Enter Mobile" name="mobile">
     </div>
     <div class="form-group">
-  <label for="loc">Location:</label>
-  <select class="form-control" id="loc" name="location">
+  <label for="loc">Place:</label>
+  <select class="form-control" id="place" name="place">
     <option value="Sultanpuri">Sultanpuri</option>
     <option value="Mangolpuri">Mangolpuri</option>
     <option value="Peeragadhi">Peeragadhi</option>
@@ -111,8 +71,8 @@ if ($result->num_rows > 0) {
   </select>
 </div>
  <div class="form-group">
-  <label for="type">Complaint Type:</label>
-  <select class="form-control" id="type" name="type">
+  <label for="type">Dept:</label>
+  <select class="form-control" id="dept" name="dept">
     <option value="Street Light">Street Light</option>
     <option value="Pipe leakage">Pipe leakage</option>
     <option value="Rain Water">Rain Water</option>
@@ -120,19 +80,8 @@ if ($result->num_rows > 0) {
     <option value="Garbage">Garbage</option>
   </select>
 </div>
-<div class="form-group">
-  <label for="comment">Complain:</label>
-  <textarea class="form-control" rows="5" id="complain" name="complain"></textarea>
-</div>
- <div class="form-group">
-  <label for="type">Complaint Level:</label>
-  <select class="form-control" id="type" name="level">
-    <option value="Low">Low</option>
-    <option value="Medium">Medium</option>
-    <option value="High">High</option>
-  </select>
-</div>
-    <button type="submit" class="btn btn-primary btn-block" id="btn">Post Complain</button>
+
+    <button type="submit" class="btn btn-primary btn-block" id="btn">Add Officer</button>
   </form>
   <style type="text/css">
     #noti{
@@ -148,15 +97,14 @@ $(document).ready(function(){
 $('#userForm').submit(function(){
 
 var name = $('#name').val();
-var land = $('#land').val();
-var add = $('#add').val();
-var place = $('#place').val();
-var complain = $('#complain').val();
+var email = $('#email').val();
+var password = $('#password').val();
+var mobile = $('#mobile').val();
 
 // show that something is loading
 $('#btn').val("Please wait!");
 
-if(name == '' || land == '' || add == '' || place == '' || complain == ''){
+if(name == '' || email == '' || password == '' || mobile == ''){
   $('#noti').css('display','block');
   return false;
 }
@@ -164,14 +112,14 @@ else {
 // Call ajax for pass data to other place
 $.ajax({
 type: 'POST',
-url: 'general.php',
+url: 'officer.php',
 data: $(this).serialize() // getting filed value in serialize form
 })
 .done(function(data){ // if getting done then call.
 
 // show the response
 alert(data);
-window.location.href = "home.php";
+window.location.href = "admin.php";
 })
 .fail(function() { // if fail then getting message
 
